@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4CAF50">
+    <title>QRコード出退勤</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>QRコード出退勤</h1>
+            <a href="settings.html" class="settings-link">⚙️ 設定</a>
+        </header>
+
+        <main id="mainContent">
+            <!-- 初期状態: ボタン表示 -->
+            <div id="buttonArea" class="button-area">
+                <button id="checkInBtn" class="action-btn check-in-btn">
+                    <span class="btn-icon">🏢</span>
+                    <span class="btn-text">出勤</span>
+                </button>
+                <button id="checkOutBtn" class="action-btn check-out-btn">
+                    <span class="btn-icon">🏠</span>
+                    <span class="btn-text">退勤</span>
+                </button>
+            </div>
+
+            <!-- QRコード表示エリア -->
+            <div id="qrArea" class="qr-area hidden">
+                <div id="qrInfo" class="qr-info">
+                    <span id="actionType" class="action-type"></span>
+                    <span id="actionTime" class="action-time"></span>
+                </div>
+                <div id="qrCodeContainer" class="qr-code-container"></div>
+                <div class="timer-container">
+                    <p class="timer-text">有効期限: <span id="timer">5:00</span></p>
+                    <progress id="timerProgress" max="300" value="300"></progress>
+                </div>
+                <button id="closeQrBtn" class="close-btn">閉じる</button>
+            </div>
+
+            <!-- エラーメッセージエリア -->
+            <div id="errorArea" class="error-area hidden">
+                <p id="errorMessage" class="error-message"></p>
+            </div>
+        </main>
+    </div>
+
+    <!-- QRコード生成ライブラリ -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <!-- トークン生成用のライブラリ -->
+    <script src="https://cdn.jsdelivr.net/npm/js-sha256@0.9.0/src/sha256.js"></script>
+    <!-- アプリケーションスクリプト -->
+    <script src="js/config.js"></script>
+    <script src="js/token.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/sw-register.js"></script>
+</body>
+</html>

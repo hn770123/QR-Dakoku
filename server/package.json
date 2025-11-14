@@ -1,0 +1,17 @@
+{
+  "name": "qr-dakoku-server",
+  "version": "1.0.0",
+  "description": "QRコード出退勤システム - 受付サーバー",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["qr", "attendance", "dakoku"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cookie-parser": "^1.4.6"
+  }
+}

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4CAF50">
+    <title>設定 - QRコード出退勤</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>設定</h1>
+            <a href="index.html" class="back-link">← 戻る</a>
+        </header>
+
+        <main class="settings-main">
+            <form id="settingsForm" class="settings-form">
+                <div class="form-group">
+                    <label for="deviceId">端末ID</label>
+                    <input type="text" id="deviceId" name="deviceId" required 
+                           placeholder="例: device001" 
+                           pattern="[a-zA-Z0-9_-]+"
+                           title="英数字、ハイフン、アンダースコアのみ使用できます">
+                    <small class="form-hint">この端末を識別するIDを入力してください</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="passkey">パスキー</label>
+                    <div class="password-input-group">
+                        <input type="password" id="passkey" name="passkey" required 
+                               placeholder="パスキーを入力" 
+                               minlength="8">
+                        <button type="button" id="togglePasskey" class="toggle-password" aria-label="パスキーの表示切替">
+                            👁️
+                        </button>
+                    </div>
+                    <small class="form-hint">8文字以上のパスキーを入力してください</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="targetUrl">リンク先URL</label>
+                    <input type="url" id="targetUrl" name="targetUrl" required 
+                           placeholder="https://example.com/receive"
+                           pattern="https?://.+">
+                    <small class="form-hint">受付ページのURLを入力してください</small>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">保存</button>
+                    <button type="button" id="resetBtn" class="btn btn-secondary">リセット</button>
+                </div>
+            </form>
+
+            <div id="saveMessage" class="save-message hidden"></div>
+
+            <div class="info-section">
+                <h2>設定について</h2>
+                <ul>
+                    <li><strong>端末ID:</strong> この端末を識別するための一意なIDです</li>
+                    <li><strong>パスキー:</strong> トークン生成に使用される秘密鍵です</li>
+                    <li><strong>リンク先URL:</strong> QRコードからアクセスする受付ページのURLです</li>
+                </ul>
+                <p class="warning-text">
+                    ⚠️ 設定はこのブラウザのローカルストレージに保存されます。
+                    ブラウザのデータを削除すると設定も消えますのでご注意ください。
+                </p>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/sw-register.js"></script>
+</body>
+</html>

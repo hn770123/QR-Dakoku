@@ -1,0 +1,5 @@
+{
+  "device001": "your-passkey-here-min-8-chars",
+  "device002": "another-passkey-for-device2",
+  "office-entrance": "office-entrance-passkey-123"
+}
