@@ -143,7 +143,9 @@ app.post('/register', (req, res) => {
         // クッキーにユーザー名を保存（1年間有効）
         res.cookie('username', username.trim(), { 
             maxAge: 365 * 24 * 60 * 60 * 1000,
-            httpOnly: true 
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax'
         });
         
         // タイムスタンプの変換
