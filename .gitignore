@@ -24,3 +24,7 @@ Thumbs.db
 # 一時ファイル
 /tmp/
 *.tmp
+
+# テストカバレッジ
+coverage/
+docs/coverage/
