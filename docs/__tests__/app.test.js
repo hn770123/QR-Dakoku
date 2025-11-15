@@ -55,6 +55,13 @@ describe('QRDakokuApp', () => {
       <div id="errorArea" class="error-area hidden">
         <p id="errorMessage"></p>
       </div>
+      <div id="logArea" class="log-area">
+        <h3 class="log-title">実行ログ</h3>
+        <div id="logContainer" class="log-container">
+          <p class="log-placeholder">ここに実行ログが表示されます</p>
+        </div>
+        <button id="clearLogBtn" class="clear-log-btn">ログをクリア</button>
+      </div>
     `;
 
     // QRCodeのモックをリセット
@@ -122,6 +129,13 @@ describe('QRDakokuApp', () => {
         </div>
         <div id="errorArea" class="error-area hidden">
           <p id="errorMessage"></p>
+        </div>
+        <div id="logArea" class="log-area">
+          <h3 class="log-title">実行ログ</h3>
+          <div id="logContainer" class="log-container">
+            <p class="log-placeholder">ここに実行ログが表示されます</p>
+          </div>
+          <button id="clearLogBtn" class="clear-log-btn">ログをクリア</button>
         </div>
       `;
 
@@ -454,6 +468,158 @@ describe('QRDakokuApp', () => {
       const errorArea = document.getElementById('errorArea');
 
       expect(errorArea.classList.contains('hidden')).toBe(true);
+    });
+  });
+
+  describe('ログ機能', () => {
+    test('ログエリアが初期状態で存在する', () => {
+      const logArea = document.getElementById('logArea');
+      const logContainer = document.getElementById('logContainer');
+      const clearLogBtn = document.getElementById('clearLogBtn');
+
+      expect(logArea).toBeTruthy();
+      expect(logContainer).toBeTruthy();
+      expect(clearLogBtn).toBeTruthy();
+    });
+
+    test('addLogでログが追加される', () => {
+      app.addLog('info', 'テストログメッセージ');
+
+      expect(app.logs.length).toBeGreaterThan(0);
+      const lastLog = app.logs[app.logs.length - 1];
+      expect(lastLog.level).toBe('info');
+      expect(lastLog.message).toBe('テストログメッセージ');
+    });
+
+    test('ログがDOMに表示される', () => {
+      app.addLog('success', 'テスト成功ログ');
+
+      const logContainer = document.getElementById('logContainer');
+      const logEntries = logContainer.querySelectorAll('.log-entry');
+
+      expect(logEntries.length).toBeGreaterThan(0);
+    });
+
+    test('異なるログレベルが正しく表示される', () => {
+      app.clearLogs();
+      
+      app.addLog('info', 'インフォログ');
+      app.addLog('success', '成功ログ');
+      app.addLog('warning', '警告ログ');
+      app.addLog('error', 'エラーログ');
+
+      const logContainer = document.getElementById('logContainer');
+      const infoLog = logContainer.querySelector('.log-entry.info');
+      const successLog = logContainer.querySelector('.log-entry.success');
+      const warningLog = logContainer.querySelector('.log-entry.warning');
+      const errorLog = logContainer.querySelector('.log-entry.error');
+
+      expect(infoLog).toBeTruthy();
+      expect(successLog).toBeTruthy();
+      expect(warningLog).toBeTruthy();
+      expect(errorLog).toBeTruthy();
+    });
+
+    test('clearLogsでログがクリアされる', () => {
+      app.addLog('info', 'クリア前のログ');
+      
+      const initialLogCount = app.logs.length;
+      expect(initialLogCount).toBeGreaterThan(0);
+
+      app.clearLogs();
+
+      // clearLogsは新しいログ「ログをクリアしました」を追加するので、1つのログがある
+      expect(app.logs.length).toBe(1);
+      expect(app.logs[0].message).toBe('ログをクリアしました');
+    });
+
+    test('出勤ボタンクリック時にログが出力される', async () => {
+      Config.save({
+        deviceId: 'device001',
+        passkey: 'testpasskey123',
+        targetUrl: 'https://example.com/receive'
+      });
+
+      const initialLogCount = app.logs.length;
+
+      await app.handleAction('check-in');
+
+      // ログが追加されているか確認
+      expect(app.logs.length).toBeGreaterThan(initialLogCount);
+      
+      // 出勤ボタンがクリックされたログが存在するか確認
+      const hasCheckInLog = app.logs.some(log => 
+        log.message.includes('出勤ボタンがクリックされました')
+      );
+      expect(hasCheckInLog).toBe(true);
+    });
+
+    test('退勤ボタンクリック時にログが出力される', async () => {
+      Config.save({
+        deviceId: 'device001',
+        passkey: 'testpasskey123',
+        targetUrl: 'https://example.com/receive'
+      });
+
+      app.clearLogs();
+
+      await app.handleAction('check-out');
+
+      // 退勤ボタンがクリックされたログが存在するか確認
+      const hasCheckOutLog = app.logs.some(log => 
+        log.message.includes('退勤ボタンがクリックされました')
+      );
+      expect(hasCheckOutLog).toBe(true);
+    });
+
+    test('QRコード生成エラー時に詳細ログが出力される', async () => {
+      Config.save({
+        deviceId: 'device001',
+        passkey: 'testpasskey123',
+        targetUrl: 'https://example.com/receive'
+      });
+
+      global.QRCode.toCanvas.mockRejectedValue(new Error('QR generation failed'));
+
+      app.clearLogs();
+
+      await app.handleAction('check-in');
+      await new Promise(resolve => setTimeout(resolve, 10));
+
+      // エラーログが存在するか確認
+      const hasErrorLog = app.logs.some(log => 
+        log.level === 'error' && log.message.includes('QRコード描画エラー')
+      );
+      expect(hasErrorLog).toBe(true);
+    });
+
+    test('設定が不完全な場合にログが出力される', async () => {
+      Config.save({
+        deviceId: '',
+        passkey: 'testpasskey123',
+        targetUrl: 'https://example.com/receive'
+      });
+
+      app.clearLogs();
+
+      await app.handleAction('check-in');
+
+      // エラーログが存在するか確認
+      const hasErrorLog = app.logs.some(log => 
+        log.level === 'error' && log.message.includes('設定が不完全です')
+      );
+      expect(hasErrorLog).toBe(true);
+    });
+
+    test('clearLogBtnをクリックするとログがクリアされる', () => {
+      app.addLog('info', 'クリアテスト');
+
+      const clearLogBtn = document.getElementById('clearLogBtn');
+      clearLogBtn.click();
+
+      // clearLogsが呼ばれて「ログをクリアしました」ログが追加される
+      expect(app.logs.length).toBe(1);
+      expect(app.logs[0].message).toBe('ログをクリアしました');
     });
   });
 });

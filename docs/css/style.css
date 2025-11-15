@@ -237,6 +237,119 @@ main {
     border-left: 4px solid #c62828;
 }
 
+/* ===== ログエリア ===== */
+.log-area {
+    margin-top: 30px;
+    padding: 20px;
+    background: #f5f5f5;
+    border-radius: 10px;
+}
+
+.log-title {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: #333;
+    font-weight: bold;
+}
+
+.log-container {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    max-height: 250px;
+    overflow-y: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+
+.log-placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+.log-entry {
+    margin-bottom: 8px;
+    padding: 8px;
+    border-radius: 4px;
+    background: #fafafa;
+    border-left: 3px solid #667eea;
+}
+
+.log-entry.info {
+    border-left-color: #2196F3;
+    background: #e3f2fd;
+}
+
+.log-entry.success {
+    border-left-color: #4CAF50;
+    background: #e8f5e9;
+}
+
+.log-entry.warning {
+    border-left-color: #FF9800;
+    background: #fff3e0;
+}
+
+.log-entry.error {
+    border-left-color: #f44336;
+    background: #ffebee;
+    color: #c62828;
+}
+
+.log-timestamp {
+    color: #666;
+    font-size: 0.8rem;
+    margin-right: 8px;
+}
+
+.log-message {
+    color: #333;
+}
+
+.clear-log-btn {
+    margin-top: 10px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    background: #666;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.clear-log-btn:hover {
+    background: #555;
+}
+
+/* ===== フッター ===== */
+footer {
+    background: #f5f5f5;
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid #ddd;
+}
+
+.settings-link-footer {
+    display: inline-block;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.settings-link-footer:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+}
+
 /* ===== 設定ページ ===== */
 .settings-main {
     max-width: 500px;
