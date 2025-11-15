@@ -12,7 +12,6 @@
     <div class="container">
         <header>
             <h1>QRコード出退勤</h1>
-            <a href="settings.html" class="settings-link">⚙️ 設定</a>
         </header>
 
         <main id="mainContent">
@@ -46,7 +45,20 @@
             <div id="errorArea" class="error-area hidden">
                 <p id="errorMessage" class="error-message"></p>
             </div>
+
+            <!-- ログ出力エリア -->
+            <div id="logArea" class="log-area">
+                <h3 class="log-title">実行ログ</h3>
+                <div id="logContainer" class="log-container">
+                    <p class="log-placeholder">ここに実行ログが表示されます</p>
+                </div>
+                <button id="clearLogBtn" class="clear-log-btn">ログをクリア</button>
+            </div>
         </main>
+
+        <footer>
+            <a href="settings.html" class="settings-link-footer">⚙️ 設定</a>
+        </footer>
     </div>
 
     <!-- QRコード生成ライブラリ -->
